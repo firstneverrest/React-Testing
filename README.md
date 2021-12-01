@@ -2,8 +2,8 @@
 
 React provides React Testing library and Jest to test your react app by default.
 
-- React testing library - provides virtual DOM for tests
-- Jest - test runner that finds tests, run tests, determines whether tests pass or fail
+- [React testing library](https://testing-library.com/docs/react-testing-library/intro) - provides virtual DOM for tests
+- [Jest](https://jestjs.io/docs/tutorial-react) - test runner that finds tests, run tests, determines whether tests pass or fail
 
 ## What you need to test?
 
@@ -27,6 +27,10 @@ npm test
 npm test -- <filename1> <filename2> <filenameN>
 ```
 
+## Testing Playground
+
+Useful chrome extension for create tests. You can get suggested query by hover on that element and this extension will show selection code for it. Then, you copy and paste in your tests.
+
 ## Basic command
 
 - `render()`- render component in virtual DOM
@@ -36,7 +40,11 @@ npm test -- <filename1> <filename2> <filenameN>
 
 ## Unit testing
 
-Test individual component like component rendering.
+Test individual component like component rendering. There are three principles for creating tests:
+
+1. Arrange - render component, prepare things
+2. Act - do event like click, insert text
+3. Assert - expect the results you want to be.
 
 ```js
 // example 1
@@ -60,16 +68,53 @@ test('on initial render', () => {
 });
 ```
 
+## Asynchronous Tests
+
+1. Test after data fetching is complete
+
 ```js
-// example 3
+import {
+  render,
+  screen,
+  waitForElementToBeRemoved,
+} from '@testing-library/react';
+import App from './App';
+
+describe('App component tests', () => {
+  it('Loading text is shown while API request is in progress', async () => {
+    render(<App />);
+    const loading = screen.getByText(/Loading.../i);
+    expect(loading).toBeInTheDocument();
+
+    await waitForElementToBeRemoved(() => screen.getByText(/Loading.../i));
+    const title = screen.getByText(/User Accounts/i);
+    expect(title).toBeInTheDocument();
+  });
+});
+```
+
+2. Test data fetching
+
+```js
+
+```
+
+## Create Test Suites
+
+```js
 import { render, screen } from '@testing-library/react';
 import App from './App';
 
-test('renders header after getting users', async () => {
-  render(<App />);
-
-  // use findByText instead of getByText to enable async/await
-  const linkElement = await screen.findByText(/User Accounts/i);
-  expect(linkElement).toBeInTheDocument();
+// create test suite with describe()
+describe('App component tests', () => {
+  it('renders header after getting users', async () => {
+    render(<App />);
+    const linkElement = await screen.findByText(/User Accounts/i);
+    expect(linkElement).toBeInTheDocument();
+  });
 });
 ```
+
+## Query element with data-testid attribute
+
+`data-*` attribute is used to store custom data private to the page or application such as `data-testid` for making tests easier.
