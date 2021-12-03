@@ -33,10 +33,20 @@ Useful chrome extension for create tests. You can get suggested query by hover o
 
 ## Basic command
 
+![image](images/queries.jpg)
+
 - `render()`- render component in virtual DOM
 - `screen.debug()` - show html DOM while testing to improve understanding
-- `screen.getByRole('button', {name})` - get element by tag
+- `screen.getByText()` - find by element text content
+- `screen.getByRole('button', {name})` - get element by tag like listitem(li), heading(h1-h6)
 - `screen.findByRole('button', {name})` - like getByRole but be used for async/await
+- `screen.getByTestId('testId')` - find element by `data-testid` tag
+- `screen.getByLabelTest()` - find by label or aria-label text content
+- `screen.getByPlaceholderTest()` - find by input placeholder value
+- `screen.getByDisplayValue()` - find by form element current value
+- `expect().not.toHaveLength(0)` - expect element not to have 0 length
+- `expect().toHaveTextContent('')` - expect element to have wanted text
+- `expect().toBeInTheDocument()` - expect element to show on document
 
 ## Unit testing
 
