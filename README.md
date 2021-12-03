@@ -46,7 +46,7 @@ Useful chrome extension for create tests. You can get suggested query by hover o
 - `screen.getByDisplayValue()` - find by form element current value
 - `expect().not.toHaveLength(0)` - expect element not to have 0 length
 - `expect().toHaveTextContent('')` - expect element to have wanted text
-- `expect().toBeInTheDocument()` - expect element to show on document
+- `expect().toBeInTheDocument()` - expect element to exist on the DOM
 
 ## Unit testing
 
@@ -105,6 +105,26 @@ describe('Testing App Component', () => {
 ```
 
 Tip: describe() should not has async callback function, but it() can has async callback function
+
+## User Event
+
+```js
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import App from './App';
+
+describe('Testing App Component', () => {
+  it('delete a user when clicked delete button', async () => {
+    render(<App />);
+
+    const deleteButton = await screen.findAllByRole('button');
+    const firstUser = screen.getAllByTestId('name')[0];
+    userEvent.click(deleteButton[0]);
+    expect(firstUser).not.toBeInTheDocument();
+  });
+});
+```
 
 ## Query element with data-testid attribute
 
