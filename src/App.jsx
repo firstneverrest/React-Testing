@@ -19,6 +19,11 @@ function App() {
     fetchData();
   }, []);
 
+  const deleteUser = (id) => {
+    const newUsers = users.filter((user) => user.id !== id);
+    setUsers(newUsers);
+  };
+
   if (loading) {
     return <h5 className="text-pink-500">Loading...</h5>;
   }
@@ -27,7 +32,15 @@ function App() {
     <div className="flex flex-col items-center">
       <h3 className="text-red-300 mt-2">User Accounts</h3>
       {users.map((user) => {
-        return <User key={user.id} name={user.name} email={user.email} />;
+        return (
+          <User
+            key={user.id}
+            id={user.id}
+            name={user.name}
+            email={user.email}
+            deleteUser={deleteUser}
+          />
+        );
       })}
     </div>
   );
