@@ -70,50 +70,31 @@ test('on initial render', () => {
 
 ## Asynchronous Tests
 
-1. Test after data fetching is complete
+1. Test data fetching
 
 ```js
-import {
-  render,
-  screen,
-  waitForElementToBeRemoved,
-} from '@testing-library/react';
-import App from './App';
-
-describe('App component tests', () => {
-  it('Loading text is shown while API request is in progress', async () => {
-    render(<App />);
-    const loading = screen.getByText(/Loading.../i);
-    expect(loading).toBeInTheDocument();
-
-    await waitForElementToBeRemoved(() => screen.getByText(/Loading.../i));
-    const title = screen.getByText(/User Accounts/i);
-    expect(title).toBeInTheDocument();
-  });
-});
-```
-
-2. Test data fetching
-
-```js
-
-```
-
-## Create Test Suites
-
-```js
+import React from 'react';
 import { render, screen } from '@testing-library/react';
 import App from './App';
 
-// create test suite with describe()
-describe('App component tests', () => {
-  it('renders header after getting users', async () => {
+describe('Testing App Component', () => {
+  it('loading text is shown while API request is in progress', () => {
     render(<App />);
-    const linkElement = await screen.findByText(/User Accounts/i);
-    expect(linkElement).toBeInTheDocument();
+
+    const loading = screen.getByText('Loading...');
+    expect(loading).toBeInTheDocument();
+  });
+
+  it('username is shown after API request', async () => {
+    render(<App />);
+
+    const listItemElements = await screen.findAllByTestId('name');
+    expect(listItemElements).not.toHaveLength(0);
   });
 });
 ```
+
+Tip: describe() should not has async callback function, but it() can has async callback function
 
 ## Query element with data-testid attribute
 
