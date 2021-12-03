@@ -3,22 +3,29 @@ import User from './components/User';
 
 function App() {
   const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('https://jsonplaceholder.typicode.com/users')
-      .then((response) => response.json())
-      .then((result) => {
-        setUsers(result);
-      });
+    const fetchData = async () => {
+      fetch('https://jsonplaceholder.typicode.com/users')
+        .then((response) => response.json())
+        .then((data) => {
+          setUsers(data);
+          setLoading(false);
+        })
+        .catch((error) => setError(error.message));
+    };
+
+    fetchData();
   }, []);
 
-  if (users.length === 0) {
+  if (loading) {
     return <h5 className="text-pink-500">Loading...</h5>;
   }
 
   return (
     <div className="flex flex-col items-center">
-      <h3 className="text-red-300 mt-2">User Account</h3>
+      <h3 className="text-red-300 mt-2">User Accounts</h3>
       {users.map((user) => {
         return <User key={user.id} name={user.name} email={user.email} />;
       })}
