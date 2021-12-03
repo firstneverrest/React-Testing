@@ -11,7 +11,14 @@ describe('Testing App Component', () => {
     expect(loading).toBeInTheDocument();
   });
 
-  it('username is shown after API request', async () => {
+  it('renders user card if request succeeds', async () => {
+    window.fetch = jest.fn();
+    window.fetch.mockResolvedValueOnce({
+      json: async () => [
+        { id: 1, name: 'John Doe', email: 'example@hotmail.com' },
+      ],
+    });
+
     render(<App />);
 
     const listItemElements = await screen.findAllByTestId('name');
@@ -24,8 +31,6 @@ describe('Testing App Component', () => {
     const deleteButton = await screen.findAllByRole('button');
     const firstUser = screen.getAllByTestId('name')[0];
     userEvent.click(deleteButton[0]);
-    screen.debug();
-    // const userElement = screen.getAllByTestId('name');
     expect(firstUser).not.toBeInTheDocument();
   });
 });
