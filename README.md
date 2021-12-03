@@ -80,7 +80,7 @@ test('on initial render', () => {
 
 ## Asynchronous Tests
 
-1. Test data fetching
+1. Test data fetching result
 
 ```js
 import React from 'react';
@@ -105,6 +105,25 @@ describe('Testing App Component', () => {
 ```
 
 Tip: describe() should not has async callback function, but it() can has async callback function
+
+2. Test data fetching with mocking
+   Sending request testing does not send request to real server but send fake request instead with dummy function. It will fetch data from mock data instead of react fetch() function in the component.
+
+```js
+it('renders user card if request succeeds', async () => {
+  window.fetch = jest.fn();
+  window.fetch.mockResolvedValueOnce({
+    json: async () => [
+      { id: 1, name: 'John Doe', email: 'example@hotmail.com' },
+    ],
+  });
+
+  render(<App />);
+
+  const listItemElements = await screen.findAllByTestId('name');
+  expect(listItemElements).not.toHaveLength(0);
+});
+```
 
 ## User Event
 
